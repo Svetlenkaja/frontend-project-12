@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import { Formik, Form, Field } from 'formik';
-import { useLoginMutation } from '../authApi';
+import { useLoginMutation } from '../api/authApi';
 import { setUser } from '../slices/authSlice';
 import { appPath } from '../routes';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +26,20 @@ const Login = () => {
             nav(appPath.home());
           }
           if (error) {
-            setErrors({ name: error.data.message });
+            switch (error.data.statusCode) {
+              case 0: {
+                setErrors({ name: 'Ошибка сети' });
+                break;
+              }
+              case 401: {
+                setErrors({ name: 'Неверные имя пользователя или пароль' });
+                break;
+              }
+              default: {
+                setErrors({ name: 'Неизвестная ошибка' });
+                break;
+              }
+            }
           }
         }
       }

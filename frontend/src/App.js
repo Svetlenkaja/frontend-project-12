@@ -1,5 +1,5 @@
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// import { Provider, ErrorBoundary } from '@rollbar/react'; // Provider imports 'rollbar'
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
