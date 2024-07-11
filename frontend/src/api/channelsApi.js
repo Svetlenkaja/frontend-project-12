@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const channelsApi = createApi({
-  reducerPath: 'channels',
+  reducerPath: 'channelsApi',
   baseQuery: fetchBaseQuery({ 
     baseUrl: '/api/v1/channels',
     prepareHeaders:  (headers) => {
