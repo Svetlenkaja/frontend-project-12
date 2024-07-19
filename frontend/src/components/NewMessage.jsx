@@ -1,10 +1,33 @@
 import { Formik, Form, Field  } from "formik";
 import Button from 'react-bootstrap/Button';
+import { useAddMessageMutation } from '../api/messagesApi.js';
+import { useSelector } from 'react-redux';
 
 const Message = () => {
+
+  const [addMessage] = useAddMessageMutation();
+  const { username } = useSelector((state) => state.auth);
+  const { currentChannel } = useSelector((state) => state.app);
+  const channelId = currentChannel.id;
+
+  const handleSubmit = async (values, { resetForm }) => {
+    const { message } = values;
+    const newMessage = { body: message, channelId, username };
+    try {
+      const response = await addMessage(newMessage);
+      if (response.error?.status === 'FETCH_ERROR') {
+        console.error('FETCH_ERROR');
+      } else {
+        resetForm();
+        //inputRef.current?.focus();
+      }
+    } catch (error) {
+      console.error('Sending message error: ', error);
+    }
+  };
   return(
     <Formik 
-    initialValues={{ message: ''}}>
+    initialValues={{ message: '', channelId, username}} onSubmit={handleSubmit}>
     {props => (
         <Form onSubmit={props.handleSubmit} className="py-1 border rounded-2"> 
           <div className="input-group">

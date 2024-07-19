@@ -5,22 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setChannels } from '../slices/appSlice.js';
 
 const Channels = () => {
-  const {
-    data: channels,
-    isLoading: isLoadingChannels,
-    isError: isErrorChannels,
-    error: errorChannels,
-  } = useGetChannelsQuery();
+  const { data = [] } = useGetChannelsQuery();
 
   const dispatch = useDispatch();
 
   const currentChannel = useSelector((state) => state.app.currentChannel);
 
   useEffect(() => {
-    if (channels) {
-      dispatch(setChannels(channels));
+    if (data) {
+      dispatch(setChannels(data));
     }
-  }, [channels, dispatch]);
+  }, [data, dispatch]);
 
 
   return(
@@ -33,7 +28,7 @@ const Channels = () => {
         </button>
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
-        {channels?.map(({ id, name, removable }) => (
+        {data.map(({ id, name }) => (
           <li className="nav-item w-100" key={id}>
             <button 
               type="button" 
