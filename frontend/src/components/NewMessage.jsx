@@ -19,7 +19,6 @@ const Message = () => {
         console.error('FETCH_ERROR');
       } else {
         resetForm();
-        //inputRef.current?.focus();
       }
     } catch (error) {
       console.error('Sending message error: ', error);
@@ -27,17 +26,18 @@ const Message = () => {
   };
   return(
     <Formik 
-    initialValues={{ message: '', channelId, username}} onSubmit={handleSubmit}>
-    {props => (
-        <Form onSubmit={props.handleSubmit} className="py-1 border rounded-2"> 
+    initialValues={{ message: '', channelId, username}} 
+    onSubmit={handleSubmit}>
+    {({ handleSubmit, handleChange, values, errors }) => (
+        <Form onSubmit={handleSubmit} className="py-1 border rounded-2"> 
           <div className="input-group">
             <label htmlFor="newMessage" hidden>Новое сообщение</label>
             <Field
               type="text"
               name="message"
               className="border-0 p-0 ps-2 form-control"
-              onChange={props.handleChange}
-              value={props.values.message}
+              onChange={handleChange}
+              value={values.message}
               placeholder="Введите сообщение..."
             />
             <Button type="submit" className="btn btn-group-vertical">
@@ -46,7 +46,7 @@ const Message = () => {
             </Button>
           </div>
           
-          {props.errors.name && <div id="feedback">{props.errors.name}</div>}
+          {errors.name && <div id="feedback">{errors.name}</div>}
           
         </Form>
       )}

@@ -8,8 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { appPath } from '../routes';
 
 
-
-
 const Home = () => {
   const nav= useNavigate();
 

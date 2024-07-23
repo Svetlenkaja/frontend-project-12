@@ -10,7 +10,8 @@ const appSlice = createSlice({
   name: 'app',
   initialState: {
     channels: [],
-    currentChannel: defaultChannel
+    currentChannel: defaultChannel,
+    activeModal: '',
   },
   reducers: {
     setChannels(state, { payload }) {
@@ -23,9 +24,14 @@ const appSlice = createSlice({
         ...state, currentChannel: payload,
       };
     },
+    setActiveModal(state, { payload}) {
+      return {
+        ...state, activeModal: payload,
+      }
+    }
   },
 });
 
-export const { setCurrentChannel, setChannels } = appSlice.actions;
+export const { setCurrentChannel, setChannels, setActiveModal } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -7,12 +7,12 @@ import { io } from 'socket.io-client';
 
 const Messages = () => {
   const dispatch = useDispatch();
-  const {data = [] } = useGetMessagesQuery();
+  const {data: messages = [] } = useGetMessagesQuery();
   
   const { currentChannel } = useSelector((state) => state.app);
 
   const socket = io();
-  const curruntChannelMessages = data.filter(
+  const curruntChannelMessages = messages.filter(
     (message) => message.channelId === currentChannel.id,
   );
 
@@ -26,7 +26,7 @@ const Messages = () => {
     return () => {
       socket.off('newMessage');
     };
-  }, [currentChannel, data, dispatch, socket]);
+  }, [currentChannel, messages, dispatch, socket]);
 
   return(
     <Col className="p-0 h-100">
