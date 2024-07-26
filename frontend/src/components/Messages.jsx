@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import { useGetMessagesQuery, messagesApi } from '../api/messagesApi';
 import NewMessage from './NewMessage';
-import { io } from 'socket.io-client';
+import SocketContext from '../context/socketContext.jsx';
 
 const Messages = () => {
   const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
   const {data: messages = [] } = useGetMessagesQuery();
   
   const { currentChannel } = useSelector((state) => state.app);
 
-  const socket = io();
   const curruntChannelMessages = messages.filter(
     (message) => message.channelId === currentChannel.id,
   );

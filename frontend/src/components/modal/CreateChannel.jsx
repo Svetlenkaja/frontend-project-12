@@ -23,8 +23,8 @@ const CreateChannel = ({ handleCloseModal, validationSchema }) => {
             const newChannel = { name: values.name };
             const { data: channel } = await addChannel(newChannel);
             console.log(channel);
-              handleCloseModal();
-              dispatch(setCurrentChannel(channel));
+            handleCloseModal();
+            dispatch(setCurrentChannel(channel));
           } catch (e) {
             console.error(e);
           }

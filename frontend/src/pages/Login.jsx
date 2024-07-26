@@ -1,19 +1,13 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import { Formik, Form, Field } from 'formik';
+import { Container, Form, Row, Card, Button } from 'react-bootstrap';
+import { Formik } from 'formik';
 import { useLoginMutation } from '../api/authApi';
-import { setUser } from '../slices/authSlice';
-import { appPath } from '../routes';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/authContext';
 
 const Login = () => {
   const [login] = useLoginMutation();
-  const nav = useNavigate();
-  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const { logIn } = useAuth();
 
   return (
     <Container className="container-fluid h-100">
@@ -24,14 +18,11 @@ const Login = () => {
               <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
               </div>
               <Formik
-                initialValues={{ username: "", password: "" }}
+                initialValues={{ username: '', password: ''}}
                 onSubmit = { async (values, { setErrors }) => {
                   const { data, error } = await login(values);
                   if (data) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('username', data.username);
-                    dispatch(setUser(data));
-                    nav(appPath.home());
+                    logIn(data);
                   }
                   if (error) {
                     switch (error.data.statusCode) {
@@ -54,34 +45,37 @@ const Login = () => {
               >
                 {props => (
                   <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={props.handleSubmit}> 
-                    <h1 className="text-center mb-4">Войти</h1>
-                    <div className="form-floating mb-3">
-                      <label htmlFor="username">Ваш ник</label>
-                      <Field
-                        type="text"
-                        name="username"
-                        id="username"
-                        className="form-control"
-                        onChange={props.handleChange}
+                    <h1 className="text-center mb-4">{t('titles.login')}</h1>
+                    <Form.Group className="form-floating mb-3">
+                      
+                      <Form.Control 
+                        type="text" 
+                        name="username" 
+                        id="username" 
                         value={props.values.username}
+                        onChange={props.handleChange}
                         required
-                        placeholder="Ваш ник"
-                        
+                        placeholder={t('form.login.username')}
+                        isInvalid={!!props.errors.username}
                       />
-                    </div>
-                    <div className="form-floating mb-4">
-                      <label htmlFor="password">Пароль</label>
-                      <Field
+                      <Form.Label htmlFor="username">{t('form.login.username')}</Form.Label>
+                      <Form.Control.Feedback type="invalid">{props.errors.username}</Form.Control.Feedback>
+                    </Form.Group>                   
+                    <Form.Group className="form-floating mb-3">                       
+                      <Form.Control 
                         type="password"
                         name="password"
                         id="password"
-                        className="form-control"
-                        onChange={props.handleChange}
                         value={props.values.password}
-                        placeholder="Пароль"
+                        onChange={props.handleChange}
+                        placeholder={t('form.login.password')}                     
+                        required
+                        isInvalid={!!props.errors.password} 
                       />
-                    </div>
-                    <Button type="submit" className="w-100 mb-3 btn">Войти</Button>
+                      <Form.Label htmlFor="password">{t('form.login.password')}</Form.Label>
+                      <Form.Control.Feedback type="invalid">{props.errors.password}</Form.Control.Feedback>
+                    </Form.Group>
+                    <Button type="submit" className="w-100 mb-3 btn">{t('form.login.btn_login')}</Button>
                     {props.errors.name && <div id="feedback">{props.errors.name}</div>}                    
                   </Form>
                 )}

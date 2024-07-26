@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { useGetChannelsQuery } from '../api/channelsApi';
-import { useSelector, useDispatch } from 'react-redux';
-import { setChannels, setCurrentChannel, setActiveModal } from '../slices/appSlice.js';
+import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
+import { setCurrentChannel, setActiveModal } from '../slices/appSlice.js';
 import  Modal from '../components/modal/Modal.jsx';
 import { useTranslation } from 'react-i18next';
+import SocketContext from '../context/socketContext.jsx';
 
 const Channels = () => {
   const { data: channels = [] } = useGetChannelsQuery();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const socket = useContext(SocketContext);
 
   const { currentChannel } = useSelector((state) => state.app);
 
@@ -22,11 +24,18 @@ const Channels = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (channels) {
-  //     dispatch(setChannels(channels));
-  //   }
-  // }, [channels, dispatch]);
+  useEffect(() => {
+    console.log('useEffect');
+    socket.on('newChannel', (newChannel) => {
+      dispatch(channelsApi.util.updateQueryData('getChannels', undefined, (draftChannels) => {
+        draftChannels.push(newChannel);
+      }));
+    });
+
+    return () => {
+      socket.off('newChannel');
+    };
+  }, [currentChannel, channels, dispatch, socket]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('CreateChannel'));
