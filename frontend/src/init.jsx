@@ -12,7 +12,13 @@ import SocketContext from './context/socketContext';
 import { io } from 'socket.io-client';
 import { ToastContainer } from 'react-toastify';
 import filter from 'leo-profanity';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
+
+const rollbarConfig = {
+  accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
+  environment: 'production',
+};
 
 const init = async () => {
   const i18n = i18next.createInstance();
@@ -33,18 +39,22 @@ const init = async () => {
   socket.connect();
 
   return (
-    <BrowserRouter>
-      <SocketContext.Provider value={socket}>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18n}>
-            <AuthProvider>
-              < App />
-            </AuthProvider>
-          </I18nextProvider>
-        </Provider>
-      </SocketContext.Provider>
-      <ToastContainer />
-    </BrowserRouter>
+    <RollbarProvider config={rollbarConfig}>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <SocketContext.Provider value={socket}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <AuthProvider>
+                  < App />
+                </AuthProvider>
+              </I18nextProvider>
+            </Provider>
+          </SocketContext.Provider>
+          <ToastContainer />
+        </BrowserRouter>
+    </ErrorBoundary>
+    </RollbarProvider>
   );
 };
 
