@@ -3,58 +3,79 @@ import { Formik } from 'formik';
 import { useAddChannelMutation } from '../../api/channelsApi.js'
 import { setCurrentChannel } from '../../slices/appSlice';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import * as filter from 'leo-profanity';
 
-const CreateChannel = ({ handleCloseModal, validationSchema }) => {
+
+const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
   const [addChannel] = useAddChannelMutation();
   const dispatch = useDispatch();
 
   return (
-    <Modal show onHide={handleCloseModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>Add new channel</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-      <Formik
-        initialValues={{ name: '' }}
-        validationSchema={validationSchema}
-        onSubmit={ async (values) => {
-          console.log('submit');
-          try {
-            const newChannel = { name: values.name };
-            const { data: channel } = await addChannel(newChannel);
-            console.log(channel);
+    <Formik
+      initialValues={{ name: '' }}
+      validationSchema={validationSchema}
+      onSubmit={ async (values) => {
+        try {
+          const newChannel = { name: filter.clean(values.name) };
+          const { data: channel, error } = await addChannel(newChannel);
+          if (error?.status === 'FETCH_ERROR') {
+            toast.error(t('notification.network_error'));
+          } else {
             handleCloseModal();
             dispatch(setCurrentChannel(channel));
-          } catch (e) {
-            console.error(e);
+            toast.success(t('notification.create'));
           }
-        }}
-        >
-          {({
-            values, handleChange, handleSubmit, errors, touched,
-          }) => (
+        } catch (error) {
+          toast.error(t('notification.error'));
+          console.error(error);
+        }
+      }}
+    >
+      {({
+        handleSubmit,
+        handleChange,
+        values,
+        errors,
+        touched,
+        isSubmitting,
+      }) => (
+      <Modal 
+        show
+        centered
+        onHide={handleCloseModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{t('titles.modal.create')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Label htmlFor="name" className="visually-hidden">Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              id="name"
-              value={values.name}
-              onChange={handleChange}
-              isInvalid={touched.name && !!errors.name}
-              required
-              autoFocus
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.name}
-            </Form.Control.Feedback>
-            <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-            <Button type="submit" variant="primary">Add</Button>
-          </Form>)}
-          </Formik>
-      </Modal.Body> 
-    </Modal>
-  )
+            <Form.Group className="mb-2">
+              <Form.Control
+                type="text"
+                name="name"
+                id="name"
+                value={values.name}
+                onChange={handleChange}
+                isInvalid={touched.name && !!errors.name}
+                disabled={isSubmitting}
+                required
+                autoFocus
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.name}
+              </Form.Control.Feedback>
+              <Modal.Footer className="border-0 d-flex justify-content-end">
+                <Button variant="secondary" onClick={handleCloseModal}>{t('titles.btn.cancel')}</Button>
+                <Button type="submit" variant="primary">{t('titles.btn.send')}</Button>
+                </Modal.Footer>
+              </Form.Group>
+            </Form>
+        </Modal.Body> 
+      </Modal>
+    )}
+    </Formik>
+  );
 }
 
 export default CreateChannel;

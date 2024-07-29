@@ -56,53 +56,57 @@ const Signup = () => {
                     console.error(e);
                   }
                 }}
+                validateOnChange={false}
               >
-                {props => (
-                  <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={props.handleSubmit}> 
+                {({
+                  values,
+                  handleSubmit,
+                  handleChange,
+                  errors,
+                  isSubmitting,
+                }) => (
+                  <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={handleSubmit}> 
                     <h1 className="text-center mb-4">{t('titles.signup')}</h1>
                     <Form.Group className="form-floating mb-3">
                       <Form.Control 
-                        type="text" 
-                        name="username" 
-                        id="username" 
-                        value={props.values.username}
-                        onChange={props.handleChange}
-                        required
+                        type="text"
+                        name="username"
+                        id="username"
+                        value={values.username}
+                        onChange={handleChange}
                         placeholder={t('form.validation.length')}
-                        isInvalid={!!props.errors.username}
+                        isInvalid={!!errors.username}
                       />
                       <Form.Label htmlFor="username">{t('form.signup.username')}</Form.Label>
-                      <Form.Control.Feedback type="invalid">{props.errors.username}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="form-floating mb-3">
                       <Form.Control 
                         type="password"
                         name="password"
                         id="password"
-                        value={props.values.password}
-                        onChange={props.handleChange}
-                        placeholder={t('form.validation.lengthPassword')}                     
-                        required
-                        isInvalid={!!props.errors.password} 
+                        value={values.password}
+                        onChange={handleChange}
+                        placeholder={t('form.validation.lengthPassword')}                  
+                        isInvalid={!!errors.password}
                       />
                       <Form.Label htmlFor="password">{t('form.signup.password')}</Form.Label>
-                      <Form.Control.Feedback type="invalid">{props.errors.password}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="form-floating mb-3">
                       <Form.Control
                         type="password"
                         name="confirmPassword"
-                        id="confirmPassword" 
-                        value={props.values.confirmPassword}
-                        onChange={props.handleChange}
-                        placeholder={t('form.validation.confirmPassword')}  
-                        required
-                        isInvalid={!!props.errors.confirmPassword}
+                        id="confirmPassword"
+                        value={values.confirmPassword}
+                        onChange={handleChange}
+                        placeholder={t('form.validation.confirmPassword')}
+                        isInvalid={!!errors.confirmPassword}
                       />
                       <Form.Label htmlFor="confirmPassword">{t('form.signup.confirmPassword')}</Form.Label>
-                      <Form.Control.Feedback type="invalid">{props.errors.confirmPassword}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
                     </Form.Group>
-                    <Button type="submit" className="w-100 mb-3 btn">{t('form.signup.btn_signup')}</Button>               
+                    <Button type="submit" className="w-100 mb-3 btn" disabled={isSubmitting}>{t('form.signup.btn_signup')}</Button>               
                   </Form>
                 )}
               </Formik>

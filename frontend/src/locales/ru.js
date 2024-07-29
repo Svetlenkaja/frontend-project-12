@@ -7,6 +7,7 @@ const ru = {
         unique: 'Должно быть уникальным',
         lengthPassword: 'Не менее 6 символов',
         confirmPassword: 'Пароли должны совпадать',
+        userExists: 'Такой пользователь уже существует',
       },
       login: {
         username: 'Ваш ник',
@@ -25,10 +26,42 @@ const ru = {
       login: 'Войти',
       signup: 'Регистрация',
       logout: 'Выйти',
+      no_account: 'Нет аккаунта?',
       channel: 'Каналы',
-      add: 'Добавить',
-      remove: 'Удалить',
-      rename: 'Переименовать',
+      count_msg: 'сообщений',
+      msg_one: '{{count}} сообщение',
+      msg_few: '{{count}} сообщения',
+      msg_many: '{{count}} сообщений',
+      placeholder: {
+        in_message: 'Введите сообщение',
+      },
+      menu: {
+        add: 'Добавить',
+        remove: 'Удалить',
+        rename: 'Переименовать',
+      },
+      modal: {
+        create: 'Добавить канал',
+        rename: 'Переименовать канал',
+        remove: 'Удалить канал',
+        isSure: 'Уверены?',
+      },
+      btn: {
+        send: 'Отправить',
+        cancel: 'Отменить',
+        remove: 'Удалить',
+      },
+    },
+    notification: {
+      create: 'Канал создан',
+      rename: 'Канал переименован',
+      remove: 'Канал удален',
+      error: 'Произошла ошибка',
+    },
+    errors: {
+      network_error: 'Ошибка сети',
+      authorize_error: 'Неверные имя пользователя или пароль',
+      unknown_error: 'Неизвестная ошибка',
     }
   },
 };

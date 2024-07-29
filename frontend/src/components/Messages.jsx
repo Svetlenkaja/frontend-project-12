@@ -1,11 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
-import { useGetMessagesQuery, messagesApi } from '../api/messagesApi';
-import NewMessage from './NewMessage';
+import { useGetMessagesQuery, messagesApi } from '../api/messagesApi.js';
+import NewMessage from './NewMessage.jsx';
 import SocketContext from '../context/socketContext.jsx';
+import { useTranslation } from 'react-i18next';
 
 const Messages = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   const {data: messages = [] } = useGetMessagesQuery();
@@ -15,6 +17,8 @@ const Messages = () => {
   const curruntChannelMessages = messages.filter(
     (message) => message.channelId === currentChannel.id,
   );
+
+  const countMsg = curruntChannelMessages.length;
 
   useEffect(() => {
     socket.on('newMessage', (newMessage) => {
@@ -35,7 +39,7 @@ const Messages = () => {
           <p className="m-0">
             <b># general</b>
           </p>
-          <span className="text-muted">0 messages</span>
+          <span className="text-muted">{t('titles.msg', {count: countMsg})}</span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5">
         {curruntChannelMessages.map((message) => (

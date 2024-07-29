@@ -3,7 +3,6 @@ import { BrowserRouter } from 'react-router-dom';
 import i18next from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import { initReactI18next } from 'react-i18next';
-import filter from 'leo-profanity';
 import App from './App.js';
 import resources from './locales';
 import { Provider } from 'react-redux';
@@ -11,6 +10,8 @@ import store from './slices/index.js';
 import AuthProvider from './context/authContext';
 import SocketContext from './context/socketContext';
 import { io } from 'socket.io-client';
+import { ToastContainer } from 'react-toastify';
+import filter from 'leo-profanity';
 
 
 const init = async () => {
@@ -42,6 +43,7 @@ const init = async () => {
           </I18nextProvider>
         </Provider>
       </SocketContext.Provider>
+      <ToastContainer />
     </BrowserRouter>
   );
 };

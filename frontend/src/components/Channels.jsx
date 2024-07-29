@@ -1,10 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { Col, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
+import { messagesApi } from '../api/messagesApi.js';
 import { setCurrentChannel, setActiveModal } from '../slices/appSlice.js';
 import  Modal from '../components/modal/Modal.jsx';
 import { useTranslation } from 'react-i18next';
@@ -25,20 +23,47 @@ const Channels = () => {
   };
 
   useEffect(() => {
-    console.log('useEffect');
     socket.on('newChannel', (newChannel) => {
-      dispatch(channelsApi.util.updateQueryData('getChannels', undefined, (draftChannels) => {
-        draftChannels.push(newChannel);
+      dispatch(channelsApi.util.updateQueryData(
+        'getChannels', 
+        undefined, 
+        (draftChannels) => {draftChannels.push(newChannel)}));
+    });
+
+    socket.on('renameChannel', (newChannel) => {
+      dispatch(channelsApi.util.updateQueryData(
+        'getChannels', 
+        undefined, 
+        (draftChannels) => {
+        const channel = draftChannels.find(({ id }) => id === newChannel.id);
+        if (channel) {
+          channel.name = newChannel.name;
+        }
       }));
     });
 
+    socket.on('removeChannel', async (removeChannel) => {
+      dispatch(channelsApi.util.updateQueryData(
+        'getChannels',
+        undefined,
+        (draftChannels) => draftChannels.filter(({ id }) => id !== removeChannel.id),
+      ));
+      dispatch(messagesApi.util.updateQueryData(
+        'getMessages',
+        undefined,
+        (draftMessages) => draftMessages.filter(({ channelId }) => channelId !== removeChannel.id),
+      ));
+    });
+
     return () => {
+      socket.off('renameChannel');
       socket.off('newChannel');
+      socket.off('removeChannel');
     };
   }, [currentChannel, channels, dispatch, socket]);
 
   const buttonHandle = () => {
-    dispatch(setActiveModal('CreateChannel'));
+    dispatch(setActiveModal('create'));
   };
 
   const activeModal = (channel, nameModal) => {
@@ -89,11 +114,11 @@ const Channels = () => {
               }`}
             />
             <Dropdown.Menu>
-              <Dropdown.Item onClick={() => activeModal(channel, 'RemoveChannel')}>
-                {t('titles.remove')}
+              <Dropdown.Item onClick={() => activeModal(channel, 'remove')}>
+                {t('titles.menu.remove')}
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => activeModal(channel, 'RenameChannel')}>
-                {t('titles.rename')}
+              <Dropdown.Item onClick={() => activeModal(channel, 'rename')}>
+                {t('titles.menu.rename')}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
