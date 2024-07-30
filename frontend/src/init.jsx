@@ -1,19 +1,17 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { BrowserRouter } from 'react-router-dom';
 import i18next from 'i18next';
-import { I18nextProvider } from 'react-i18next';
-import { initReactI18next } from 'react-i18next';
-import App from './App.js';
-import resources from './locales';
-import { Provider } from 'react-redux';
-import store from './slices/index.js';
-import AuthProvider from './context/authContext';
-import SocketContext from './context/socketContext';
+import { initReactI18next, I18nextProvider } from 'react-i18next';
 import { io } from 'socket.io-client';
 import { ToastContainer } from 'react-toastify';
 import filter from 'leo-profanity';
-import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
-
+import store from './slices/index.js';
+import AuthProvider from './context/authContext';
+import SocketContext from './context/socketContext';
+import resources from './locales';
+import App from './App.js';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
@@ -46,14 +44,14 @@ const init = async () => {
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
                 <AuthProvider>
-                  < App />
+                  <App />
                 </AuthProvider>
               </I18nextProvider>
             </Provider>
           </SocketContext.Provider>
           <ToastContainer />
         </BrowserRouter>
-    </ErrorBoundary>
+      </ErrorBoundary>
     </RollbarProvider>
   );
 };

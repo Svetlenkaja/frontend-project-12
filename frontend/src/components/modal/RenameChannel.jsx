@@ -1,18 +1,24 @@
 import { Button, Modal, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
-import { useEditChannelMutation } from '../../api/channelsApi';
-import { setCurrentChannel } from '../../slices/appSlice';
 import { toast } from 'react-toastify';
 import * as filter from 'leo-profanity';
+import { useEditChannelMutation } from '../../api/channelsApi';
+import { setCurrentChannel } from '../../slices/appSlice';
 
-const RenameChannel = ({ curChannel, handleCloseModal, validationSchema, dispatch, t }) => {
+const RenameChannel = ({
+  curChannel,
+  handleCloseModal,
+  validationSchema,
+  dispatch,
+  t,
+}) => {
   const [editChannel] = useEditChannelMutation();
 
   return (
     <Formik
       initialValues={{ name: curChannel.name }}
       validationSchema={validationSchema}
-      onSubmit={ async (values) => {
+      onSubmit={async (values) => {
         try {
           const channel = { id: curChannel.id, name: filter.clean(values.name) };
           await editChannel(channel);
@@ -33,13 +39,13 @@ const RenameChannel = ({ curChannel, handleCloseModal, validationSchema, dispatc
         touched,
         isSubmitting,
       }) => (
-        <Modal 
+        <Modal
           show
           centered
           onHide={handleCloseModal}
         >
           <Modal.Header closeButton>
-            <Modal.Title>{t('titles.modal.rename')}</Modal.Title>   
+            <Modal.Title>{t('titles.modal.rename')}</Modal.Title>
           </Modal.Header>
           <Modal.Body className="mb-0 pb-0">
             <Form onSubmit={handleSubmit}>
@@ -59,8 +65,8 @@ const RenameChannel = ({ curChannel, handleCloseModal, validationSchema, dispatc
                   {errors.name}
                 </Form.Control.Feedback>
                 <Modal.Footer className="border-0 d-flex justify-content-end">
-                <Button variant="secondary" onClick={handleCloseModal}>{t('titles.btn.cancel')}</Button>
-                <Button type="submit" variant="primary">{t('titles.btn.send')}</Button>
+                  <Button variant="secondary" onClick={handleCloseModal}>{t('titles.btn.cancel')}</Button>
+                  <Button type="submit" variant="primary">{t('titles.btn.send')}</Button>
                 </Modal.Footer>
               </Form.Group>
             </Form>

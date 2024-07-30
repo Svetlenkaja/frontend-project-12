@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser, resetUser } from '../slices/authSlice.js';
-import { useDispatch } from 'react-redux';
-import { appPath } from '../routes.js';
- 
+import appPath from '../routes.js';
+
 const AuthContext = React.createContext();
 
 const AuthProvider = ({ children }) => {
@@ -17,25 +16,28 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('username', user.username);
     dispatch(setUser(user));
     nav(appPath.home());
-  }
-  
+  };
+
   const logOut = () => {
     dispatch(resetUser());
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
     nav(appPath.login());
   };
 
+  const auth = useMemo(() => ({
+    token,
+    logIn,
+    logOut,
+  }), [token, logIn, logOut]);
+
   return (
-    <AuthContext.Provider value={{ token, logIn, logOut }}>
+    <AuthContext.Provider value={auth}>
       {children}
     </AuthContext.Provider>
   );
-
 };
 
 export default AuthProvider;
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
