@@ -28,6 +28,7 @@ const ru = {
       logout: 'Выйти',
       no_account: 'Нет аккаунта?',
       channel: 'Каналы',
+      channelManagement: 'Управление каналом',
       count_msg: 'сообщений',
       newMessage: 'Новое сообщение',
       msg_one: '{{count}} сообщение',
