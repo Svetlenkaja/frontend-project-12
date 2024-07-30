@@ -140,9 +140,7 @@ const Channels = () => {
             </li>
           )))}
       </ul>
-      (
       <Modal />
-      )
     </Col>
   );
 };
