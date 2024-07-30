@@ -47,6 +47,7 @@ const Message = () => {
             <Form.Control
               type="text"
               name="message"
+              aria-label={t('titles.newMessage')}
               className="border-0 p-0 ps-2 form-control"
               onChange={handleChange}
               value={values.message}

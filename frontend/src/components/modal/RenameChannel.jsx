@@ -56,6 +56,7 @@ const RenameChannel = ({
                   name="name"
                   id="name"
                   onChange={handleChange}
+                  aria-label={t('titles.modal.channelName')}
                   isInvalid={errors.name && touched.name}
                   value={values.name}
                   disabled={isSubmitting}

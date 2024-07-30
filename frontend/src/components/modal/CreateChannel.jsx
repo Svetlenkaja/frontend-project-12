@@ -55,6 +55,7 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
                   type="text"
                   name="name"
                   id="name"
+                  aria-label={t('titles.modal.channelName')}
                   value={values.name}
                   onChange={handleChange}
                   isInvalid={touched.name && !!errors.name}
