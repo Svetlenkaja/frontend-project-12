@@ -58,7 +58,7 @@ const ru = {
     notification: {
       create: 'Канал создан',
       rename: 'Канал переименован',
-      remove: 'Канал удален',
+      remove: 'Канал удалён',
       error: 'Произошла ошибка',
     },
     errors: {
