@@ -50,6 +50,7 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
           <Modal.Body>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-2">
+                <Form.Label htmlFor="name" className="visually-hidden">{t('titles.modal.channelName')}</Form.Label>
                 <Form.Control
                   type="text"
                   name="name"

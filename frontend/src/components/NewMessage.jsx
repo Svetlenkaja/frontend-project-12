@@ -1,5 +1,5 @@
-import { Formik, Form, Field } from 'formik';
-import Button from 'react-bootstrap/Button';
+import { Formik } from 'formik';
+import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -41,7 +41,10 @@ const Message = () => {
       }) => (
         <Form onSubmit={handleSubmit} className="py-1 border rounded-2">
           <div className="input-group">
-            <Field
+            <Form.Label className="visually-hidden" htmlFor="message">
+              {t('titles.newMessage')}
+            </Form.Label>
+            <Form.Control
               type="text"
               name="message"
               className="border-0 p-0 ps-2 form-control"

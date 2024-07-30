@@ -29,6 +29,7 @@ const ru = {
       no_account: 'Нет аккаунта?',
       channel: 'Каналы',
       count_msg: 'сообщений',
+      newMessage: 'Новое сообщение',
       msg_one: '{{count}} сообщение',
       msg_few: '{{count}} сообщения',
       msg_many: '{{count}} сообщений',
@@ -45,6 +46,7 @@ const ru = {
         rename: 'Переименовать канал',
         remove: 'Удалить канал',
         isSure: 'Уверены?',
+        channelName: 'Имя канала',
       },
       btn: {
         send: 'Отправить',
