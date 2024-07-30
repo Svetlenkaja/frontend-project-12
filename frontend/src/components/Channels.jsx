@@ -67,7 +67,7 @@ const Channels = () => {
       socket.off('newChannel');
       socket.off('removeChannel');
     };
-  }, [currentChannel, channels, dispatch, socket]);
+  }, [dispatch, socket]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('create'));
@@ -99,7 +99,7 @@ const Channels = () => {
           <li className="nav-item w-100" key={channel.id}>
             <Button
               type="button"
-              className="w-100 rounded-0 text-start btn"
+              className="w-100 rounded-0 text-start text-truncate"
               variant={`${
                 Number(currentChannel.id) === Number(channel.id) ? 'secondary' : ''
               }`}
@@ -115,7 +115,7 @@ const Channels = () => {
               <Dropdown as={ButtonGroup} className="w-100 d-flex">
                 <Button
                   type="button"
-                  className="w-100 rounded-0 text-start btn"
+                  className="w-100 rounded-0 text-start text-truncate"
                   variant={`${
                     Number(currentChannel.id) === Number(channel.id) ? 'secondary' : ''
                   }`}
