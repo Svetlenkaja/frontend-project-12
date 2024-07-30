@@ -46,7 +46,7 @@ const Messages = () => {
               <b>
                 {message.username}
               </b>
-              :
+              {': '}
               {message.body}
             </div>
           ))}
