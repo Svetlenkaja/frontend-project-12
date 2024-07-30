@@ -5,4 +5,4 @@ const appPath = {
   signup: () => '/signup',
 };
 
-export { appPath };
+export default appPath;

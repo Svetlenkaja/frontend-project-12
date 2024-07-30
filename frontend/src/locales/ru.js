@@ -18,8 +18,8 @@ const ru = {
         username: 'Имя пользователя',
         password: 'Пароль',
         confirmPassword: 'Подтвердите пароль',
-        btn_signup: 'Зарегистрироваться'
-      }
+        btn_signup: 'Зарегистрироваться',
+      },
     },
     titles: {
       appName: 'Hexlet Chat',
@@ -62,7 +62,7 @@ const ru = {
       network_error: 'Ошибка сети',
       authorize_error: 'Неверные имя пользователя или пароль',
       unknown_error: 'Неизвестная ошибка',
-    }
+    },
   },
 };
 

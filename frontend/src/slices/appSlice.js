@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-export const defaultChannel = { 
-  id: 1, 
-  name: 'general', 
-  removable: false 
-}
+export const defaultChannel = {
+  id: 1,
+  name: 'general',
+  removable: false,
+};
 
 const appSlice = createSlice({
   name: 'app',
@@ -17,18 +17,18 @@ const appSlice = createSlice({
     setChannels(state, { payload }) {
       return {
         ...state, channels: payload,
-      }
+      };
     },
     setCurrentChannel(state, { payload }) {
       return {
         ...state, currentChannel: payload,
       };
     },
-    setActiveModal(state, { payload}) {
+    setActiveModal(state, { payload }) {
       return {
         ...state, activeModal: payload,
-      }
-    }
+      };
+    },
   },
 });
 

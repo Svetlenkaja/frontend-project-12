@@ -17,8 +17,8 @@ const authSlice = createSlice({
     resetUser: (state) => {
       state.token = null;
       state.username = '';
-    }
-  }
+    },
+  },
 });
 
 export const { setUser, resetUser } = authSlice.actions;

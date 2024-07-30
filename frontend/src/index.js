@@ -14,6 +14,6 @@ document.getElementById('root').classList.add('h-100');
 const initApp = await init();
 root.render(
   <React.StrictMode>
-      {initApp}
-  </React.StrictMode>
+    {initApp}
+  </React.StrictMode>,
 );
