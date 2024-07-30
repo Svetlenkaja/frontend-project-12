@@ -14,7 +14,7 @@ const Messages = () => {
   const { currentChannel } = useSelector((state) => state.app);
 
   const curruntChannelMessages = messages.filter(
-    (message) => message.channelId === currentChannel.id,
+    (message) => Number(message.channelId) === Number(currentChannel.id),
   );
 
   const countMsg = curruntChannelMessages.length;
@@ -29,7 +29,7 @@ const Messages = () => {
     return () => {
       socket.off('newMessage');
     };
-  }, [currentChannel, messages, dispatch, socket]);
+  }, [currentChannel.id, dispatch, socket]);
 
   return (
     <Col className="p-0 h-100">
