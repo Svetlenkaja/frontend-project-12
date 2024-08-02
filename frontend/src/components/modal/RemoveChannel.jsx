@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useRemoveChannelMutation } from '../../api/channelsApi';
 import { setCurrentChannel, defaultChannel } from '../../slices/appSlice';
@@ -13,14 +13,13 @@ const RemoveChannel = ({
   const [removeChannel] = useRemoveChannelMutation();
   const { currentChannel } = useSelector((state) => state.app);
 
-  const handleRemove = async () => {
+  const handleRemove = async (id) => {
     try {
-      const { id } = modalChannel;
       await removeChannel(id).unwrap();
-      toast.success(t('notification.remove'));
-      if (Number(currentChannel.id) === Number(id)) {
+      if (currentChannel.id === id) {
         dispatch(setCurrentChannel(defaultChannel));
       }
+      toast.success(t('notification.remove'));
       handleCloseModal();
     } catch (error) {
       toast.error(t('notification.error'));
@@ -38,15 +37,11 @@ const RemoveChannel = ({
         <Modal.Title>{t('titles.modal.remove')}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="mb-0 pb-0">
-        <Form onSubmit={handleRemove}>
-          <Form.Group className="mb-2">
-            <p className="lead">{t('titles.modal.isSure')}</p>
-            <Modal.Footer className="border-0 d-flex justify-content-end">
-              <Button variant="secondary" onClick={handleCloseModal}>{t('titles.btn.cancel')}</Button>
-              <Button type="submit" variant="danger">{t('titles.btn.remove')}</Button>
-            </Modal.Footer>
-          </Form.Group>
-        </Form>
+        <p className="lead">{t('titles.modal.isSure')}</p>
+        <Modal.Footer className="border-0 d-flex justify-content-end">
+          <Button variant="secondary" onClick={handleCloseModal}>{t('titles.btn.cancel')}</Button>
+          <Button type="submit" onClick={() => handleRemove(modalChannel.id)} variant="danger">{t('titles.btn.remove')}</Button>
+        </Modal.Footer>
       </Modal.Body>
     </Modal>
   );

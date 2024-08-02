@@ -19,6 +19,7 @@ import SocketContext from '../context/socketContext.jsx';
 
 const Channels = () => {
   const { data: channels = [] } = useGetChannelsQuery();
+  console.log(channels);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const socket = useContext(SocketContext);
@@ -31,7 +32,7 @@ const Channels = () => {
     }
   };
 
-  const selectChannelModal = (channel) => dispatch(setModalChannel(channel));
+  const selectModalChannel = (channel) => dispatch(setModalChannel(channel));
 
   useEffect(() => {
     socket.on('newChannel', (newChannel) => {
@@ -55,16 +56,17 @@ const Channels = () => {
       ));
     });
 
-    socket.on('removeChannel', async (removeChannel) => {
+    socket.on('removeChannel', async (paylod) => {
+      console.log('soket');
       dispatch(channelsApi.util.updateQueryData(
         'getChannels',
         undefined,
-        (draftChannels) => draftChannels.filter(({ id }) => id !== removeChannel.id),
+        (draftChannels) => draftChannels.filter(({ id }) => id !== paylod.id),
       ));
       dispatch(messagesApi.util.updateQueryData(
         'getMessages',
         undefined,
-        (draftMessages) => draftMessages.filter(({ channelId }) => channelId !== removeChannel.id),
+        (draftMessages) => draftMessages.filter(({ channelId }) => channelId !== paylod.id),
       ));
     });
 
@@ -73,16 +75,14 @@ const Channels = () => {
       socket.off('newChannel');
       socket.off('removeChannel');
     };
-  }, [dispatch, socket, currentChannel]);
+  }, [dispatch, socket]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('create'));
   };
 
   const activeModal = (channel, nameModal) => {
-    const { id, name } = channel;
-    const channelModal = { id, name };
-    selectChannelModal(channelModal);
+    selectModalChannel(channel);
     dispatch(setActiveModal(nameModal));
   };
 

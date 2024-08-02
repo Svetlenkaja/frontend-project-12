@@ -27,7 +27,7 @@ const RenameChannel = ({
       onSubmit={async (values) => {
         try {
           const channel = { id: modalChannel.id, name: filter.clean(values.name) };
-          await editChannel(channel);
+          await editChannel(channel).unwrap();
           toast.success(t('notification.rename'));
           dispatch(setCurrentChannel(channel));
           handleCloseModal();

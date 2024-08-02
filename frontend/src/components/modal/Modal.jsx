@@ -15,7 +15,7 @@ const Modal = () => {
 
   const handleCloseModal = () => {
     dispatch(setActiveModal(''));
-    dispatch(setModalChannel({}));
+    dispatch(setModalChannel(null));
   };
 
   const validationSchema = Yup.object().shape({

@@ -12,7 +12,7 @@ const appSlice = createSlice({
     channels: [],
     currentChannel: defaultChannel,
     activeModal: '',
-    modalChannel: {},
+    modalChannel: null,
     scrollPosition: '',
   },
   reducers: {
