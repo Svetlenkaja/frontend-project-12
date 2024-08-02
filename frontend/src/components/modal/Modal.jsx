@@ -4,21 +4,22 @@ import { useTranslation } from 'react-i18next';
 import CreateChannel from './CreateChannel';
 import RenameChannel from './RenameChannel';
 import { useGetChannelsQuery } from '../../api/channelsApi';
-import { setActiveModal } from '../../slices/appSlice';
+import { setActiveModal, setModalChannel } from '../../slices/appSlice';
 import RemoveChannel from './RemoveChannel';
 
 const Modal = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { data: channels = [] } = useGetChannelsQuery();
-  const { activeModal, currentChannel } = useSelector((state) => state.app);
+  const { activeModal, modalChannel } = useSelector((state) => state.app);
 
   const handleCloseModal = () => {
     dispatch(setActiveModal(''));
+    dispatch(setModalChannel({}));
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string()
+    name: Yup.string().trim()
       .notOneOf(channels.map((channel) => channel.name), t('form.validation.unique'))
       .min(3, (t('form.validation.length')))
       .max(20, (t('form.validation.length')))
@@ -40,7 +41,7 @@ const Modal = () => {
 
   return (
     <Component
-      curChannel={currentChannel}
+      modalChannel={modalChannel}
       handleCloseModal={handleCloseModal}
       validationSchema={validationSchema}
       dispatch={dispatch}

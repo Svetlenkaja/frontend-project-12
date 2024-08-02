@@ -29,7 +29,7 @@ const Messages = () => {
     return () => {
       socket.off('newMessage');
     };
-  }, [currentChannel.id, dispatch, socket]);
+  }, [dispatch, socket]);
 
   return (
     <Col className="p-0 h-100">

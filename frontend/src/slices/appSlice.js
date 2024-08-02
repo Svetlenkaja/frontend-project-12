@@ -12,6 +12,8 @@ const appSlice = createSlice({
     channels: [],
     currentChannel: defaultChannel,
     activeModal: '',
+    modalChannel: {},
+    scrollPosition: '',
   },
   reducers: {
     setChannels(state, { payload }) {
@@ -29,9 +31,25 @@ const appSlice = createSlice({
         ...state, activeModal: payload,
       };
     },
+    setModalChannel(state, { payload }) {
+      return {
+        ...state, modalChannel: payload,
+      };
+    },
+    setScrollPosition(state, { payload }) {
+      return {
+        ...state, scrollPosition: payload,
+      };
+    },
   },
 });
 
-export const { setCurrentChannel, setChannels, setActiveModal } = appSlice.actions;
+export const {
+  setCurrentChannel,
+  setChannels,
+  setActiveModal,
+  setModalChannel,
+  setScrollPosition,
+} = appSlice.actions;
 
 export default appSlice.reducer;

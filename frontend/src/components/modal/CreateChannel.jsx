@@ -1,5 +1,6 @@
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import * as filter from 'leo-profanity';
 import { toast } from 'react-toastify';
@@ -10,6 +11,12 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
   const [addChannel] = useAddChannelMutation();
   const dispatch = useDispatch();
 
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <Formik
       initialValues={{ name: '' }}
@@ -18,6 +25,7 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
         try {
           const newChannel = { name: filter.clean(values.name) };
           const { data: channel, error } = await addChannel(newChannel);
+          console.log(channel);
           if (error?.status === 'FETCH_ERROR') {
             toast.error(t('notification.network_error'));
           } else {
@@ -36,7 +44,6 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
         handleChange,
         values,
         errors,
-        touched,
         isSubmitting,
       }) => (
         <Modal
@@ -58,10 +65,11 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
                   aria-label={t('titles.modal.channelName')}
                   value={values.name}
                   onChange={handleChange}
-                  isInvalid={touched.name && !!errors.name}
+                  isInvalid={!!errors.name}
+                  autoFocus
                   disabled={isSubmitting}
                   required
-                  autoFocus
+                  ref={inputRef}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.name}

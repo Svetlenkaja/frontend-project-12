@@ -9,7 +9,6 @@ export const channelsApi = createApi({
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
-      console.log(token);
       return headers;
     },
   }),

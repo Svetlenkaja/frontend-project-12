@@ -1,26 +1,32 @@
 import { Button, Modal, Form } from 'react-bootstrap';
 import { Formik } from 'formik';
+import React, { useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import * as filter from 'leo-profanity';
 import { useEditChannelMutation } from '../../api/channelsApi';
 import { setCurrentChannel } from '../../slices/appSlice';
 
 const RenameChannel = ({
-  curChannel,
+  modalChannel,
   handleCloseModal,
   validationSchema,
   dispatch,
   t,
 }) => {
   const [editChannel] = useEditChannelMutation();
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <Formik
-      initialValues={{ name: curChannel.name }}
+      initialValues={{ name: modalChannel.name }}
       validationSchema={validationSchema}
       onSubmit={async (values) => {
         try {
-          const channel = { id: curChannel.id, name: filter.clean(values.name) };
+          const channel = { id: modalChannel.id, name: filter.clean(values.name) };
           await editChannel(channel);
           toast.success(t('notification.rename'));
           dispatch(setCurrentChannel(channel));
@@ -34,6 +40,7 @@ const RenameChannel = ({
       {({
         handleSubmit,
         handleChange,
+        handleBlur,
         values,
         errors,
         touched,
@@ -56,12 +63,14 @@ const RenameChannel = ({
                   name="name"
                   id="name"
                   onChange={handleChange}
+                  obBlur={handleBlur}
                   aria-label={t('titles.modal.channelName')}
-                  isInvalid={errors.name && touched.name}
+                  isInvalid={touched.name && !!errors.name}
                   value={values.name}
                   disabled={isSubmitting}
                   required
                   autoFocus
+                  ref={inputRef}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.name}

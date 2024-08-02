@@ -21,15 +21,14 @@ const Signup = () => {
   const nav = useNavigate();
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .trim()
+    username: Yup.string().trim()
       .required(t('form.validation.required'))
       .min(3, t('form.validation.length'))
       .max(20, t('form.validation.length')),
-    password: Yup.string()
+    password: Yup.string().trim()
       .min(6, t('form.validation.lengthPassword'))
       .required(t('form.validation.required')),
-    confirmPassword: Yup.string()
+    confirmPassword: Yup.string().trim()
       .oneOf([Yup.ref('password'), null], t('form.validation.confirmPassword'))
       .required(t('form.validation.required')),
   });
@@ -61,12 +60,13 @@ const Signup = () => {
                     console.error(e);
                   }
                 }}
-                validateOnChange={false}
               >
                 {({
                   values,
                   handleSubmit,
                   handleChange,
+                  handleBlur,
+                  touched,
                   errors,
                   isSubmitting,
                 }) => (
@@ -79,11 +79,14 @@ const Signup = () => {
                         id="username"
                         value={values.username}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         placeholder={t('form.validation.length')}
-                        isInvalid={!!errors.username}
+                        isInvalid={touched.username && !!errors.username}
+                        autoComplete="username"
+                        required
                       />
                       <Form.Label htmlFor="username">{t('form.signup.username')}</Form.Label>
-                      <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
+                      <Form.Control.Feedback className="invalid-tooltip" type="invalid">{errors.username}</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="form-floating mb-3">
                       <Form.Control
@@ -92,11 +95,14 @@ const Signup = () => {
                         id="password"
                         value={values.password}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         placeholder={t('form.validation.lengthPassword')}
-                        isInvalid={!!errors.password}
+                        isInvalid={touched.password && !!errors.password}
+                        autoComplete="new-password"
+                        required
                       />
                       <Form.Label htmlFor="password">{t('form.signup.password')}</Form.Label>
-                      <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                      <Form.Control.Feedback className="invalid-tooltip" type="invalid">{errors.password}</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="form-floating mb-3">
                       <Form.Control
@@ -105,11 +111,14 @@ const Signup = () => {
                         id="confirmPassword"
                         value={values.confirmPassword}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         placeholder={t('form.validation.confirmPassword')}
-                        isInvalid={!!errors.confirmPassword}
+                        isInvalid={touched.confirmPassword && !!errors.confirmPassword}
+                        autoComplete="new-password"
+                        required
                       />
                       <Form.Label htmlFor="confirmPassword">{t('form.signup.confirmPassword')}</Form.Label>
-                      <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+                      <Form.Control.Feedback className="invalid-tooltip" type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
                     </Form.Group>
                     <Button type="submit" className="w-100 mb-3 btn" disabled={isSubmitting}>{t('form.signup.btn_signup')}</Button>
                   </Form>

@@ -9,7 +9,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
 import { messagesApi } from '../api/messagesApi.js';
-import { setCurrentChannel, setActiveModal } from '../slices/appSlice.js';
+import {
+  setCurrentChannel,
+  setActiveModal,
+  setModalChannel,
+} from '../slices/appSlice.js';
 import Modal from './modal/Modal.jsx';
 import SocketContext from '../context/socketContext.jsx';
 
@@ -26,6 +30,8 @@ const Channels = () => {
       dispatch(setCurrentChannel(channel));
     }
   };
+
+  const selectChannelModal = (channel) => dispatch(setModalChannel(channel));
 
   useEffect(() => {
     socket.on('newChannel', (newChannel) => {
@@ -67,14 +73,16 @@ const Channels = () => {
       socket.off('newChannel');
       socket.off('removeChannel');
     };
-  }, [dispatch, socket]);
+  }, [dispatch, socket, currentChannel]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('create'));
   };
 
   const activeModal = (channel, nameModal) => {
-    selectChannel(channel);
+    const { id, name } = channel;
+    const channelModal = { id, name };
+    selectChannelModal(channelModal);
     dispatch(setActiveModal(nameModal));
   };
 
