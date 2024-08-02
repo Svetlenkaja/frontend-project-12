@@ -15,7 +15,8 @@ const RenameChannel = ({
   const inputRef = useRef();
 
   useEffect(() => {
-    inputRef.current.focus();
+    inputRef.current?.focus();
+    inputRef.current?.select();
   }, []);
 
   return (
@@ -37,10 +38,8 @@ const RenameChannel = ({
       {({
         handleSubmit,
         handleChange,
-        handleBlur,
         values,
         errors,
-        touched,
         isSubmitting,
       }) => (
         <Modal
@@ -60,13 +59,11 @@ const RenameChannel = ({
                   name="name"
                   id="name"
                   onChange={handleChange}
-                  obBlur={handleBlur}
                   aria-label={t('titles.modal.channelName')}
-                  isInvalid={touched.name && !!errors.name}
+                  isInvalid={!!errors.name}
                   value={values.name}
                   disabled={isSubmitting}
                   required
-                  autoFocus
                   ref={inputRef}
                 />
                 <Form.Control.Feedback type="invalid">

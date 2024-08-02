@@ -65,7 +65,6 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
                   value={values.name}
                   onChange={handleChange}
                   isInvalid={!!errors.name}
-                  autoFocus
                   disabled={isSubmitting}
                   required
                   ref={inputRef}

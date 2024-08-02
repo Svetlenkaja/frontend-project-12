@@ -98,6 +98,7 @@ const Login = () => {
               <div className="text-center">
                 <span>
                   {t('titles.no_account')}
+                  &nbsp;
                 </span>
                 <a href="/signup">
                   {t('titles.signup')}
