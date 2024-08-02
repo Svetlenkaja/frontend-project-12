@@ -4,13 +4,11 @@ import React, { useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import * as filter from 'leo-profanity';
 import { useEditChannelMutation } from '../../api/channelsApi';
-import { setCurrentChannel } from '../../slices/appSlice';
 
 const RenameChannel = ({
   modalChannel,
   handleCloseModal,
   validationSchema,
-  dispatch,
   t,
 }) => {
   const [editChannel] = useEditChannelMutation();
@@ -29,7 +27,6 @@ const RenameChannel = ({
           const channel = { id: modalChannel.id, name: filter.clean(values.name) };
           await editChannel(channel).unwrap();
           toast.success(t('notification.rename'));
-          dispatch(setCurrentChannel(channel));
           handleCloseModal();
         } catch (error) {
           toast.error(t('notification.error'));

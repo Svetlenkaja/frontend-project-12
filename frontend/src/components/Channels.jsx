@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Col,
@@ -13,16 +13,18 @@ import {
   setCurrentChannel,
   setActiveModal,
   setModalChannel,
+  defaultChannel,
 } from '../slices/appSlice.js';
 import Modal from './modal/Modal.jsx';
 import SocketContext from '../context/socketContext.jsx';
 
 const Channels = () => {
   const { data: channels = [] } = useGetChannelsQuery();
-  console.log(channels);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const socket = useContext(SocketContext);
+  const scrollToRef = useRef(null);
+  const scrollToTop = useRef(null);
 
   const { currentChannel } = useSelector((state) => state.app);
 
@@ -33,6 +35,14 @@ const Channels = () => {
   };
 
   const selectModalChannel = (channel) => dispatch(setModalChannel(channel));
+
+  useEffect(() => {
+    if (currentChannel.id === defaultChannel.id) {
+      scrollToTop.current?.scrollIntoView({ behavior: 'smooth' });
+    } else if (scrollToRef.current) {
+      scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [currentChannel.id]);
 
   useEffect(() => {
     socket.on('newChannel', (newChannel) => {
@@ -56,18 +66,20 @@ const Channels = () => {
       ));
     });
 
-    socket.on('removeChannel', async (paylod) => {
-      console.log('soket');
+    socket.on('removeChannel', async (removeChannel) => {
       dispatch(channelsApi.util.updateQueryData(
         'getChannels',
         undefined,
-        (draftChannels) => draftChannels.filter(({ id }) => id !== paylod.id),
+        (draftChannels) => draftChannels.filter(({ id }) => id !== removeChannel.id),
       ));
       dispatch(messagesApi.util.updateQueryData(
         'getMessages',
         undefined,
-        (draftMessages) => draftMessages.filter(({ channelId }) => channelId !== paylod.id),
+        (draftMessages) => draftMessages.filter(({ channelId }) => channelId !== removeChannel.id),
       ));
+      if (removeChannel.id === currentChannel.id) {
+        dispatch(setCurrentChannel(defaultChannel));
+      }
     });
 
     return () => {
@@ -75,7 +87,7 @@ const Channels = () => {
       socket.off('newChannel');
       socket.off('removeChannel');
     };
-  }, [dispatch, socket]);
+  }, [dispatch, socket, currentChannel]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('create'));
@@ -104,7 +116,7 @@ const Channels = () => {
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.map((channel) => (!channel.removable ? (
-          <li className="nav-item w-100" key={channel.id}>
+          <li className="nav-item w-100" key={channel.id} ref={Number(channel.id) === Number(defaultChannel.id) ? scrollToTop : null}>
             <Button
               type="button"
               className="w-100 rounded-0 text-start text-truncate"
@@ -119,7 +131,7 @@ const Channels = () => {
           </li>
         )
           : (
-            <li className="nav-item w-100" key={channel.id}>
+            <li className="nav-item w-100" key={channel.id} ref={channel.id === currentChannel.id ? scrollToRef : null}>
               <Dropdown as={ButtonGroup} className="w-100 d-flex">
                 <Button
                   type="button"

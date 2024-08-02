@@ -25,7 +25,6 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
         try {
           const newChannel = { name: filter.clean(values.name) };
           const { data: channel, error } = await addChannel(newChannel);
-          console.log(channel);
           if (error?.status === 'FETCH_ERROR') {
             toast.error(t('notification.network_error'));
           } else {

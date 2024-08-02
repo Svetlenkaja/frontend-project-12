@@ -1,4 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +17,9 @@ const Messages = () => {
   const socket = useContext(SocketContext);
   const { data: messages = [] } = useGetMessagesQuery();
   const { currentChannel } = useSelector((state) => state.app);
+  const scrollToRef = useRef(null);
+  const chatBoxRef = useRef(null);
+  const [scrollBottom, setScrollBottom] = useState(true);
 
   const curruntChannelMessages = messages.filter(
     (message) => Number(message.channelId) === Number(currentChannel.id),
@@ -31,6 +39,20 @@ const Messages = () => {
     };
   }, [dispatch, socket]);
 
+  useEffect(() => {
+    const chatBox = chatBoxRef.current;
+    const handleScroll = () => {
+      setScrollBottom(chatBoxRef.current.scrollTop === chatBoxRef.current.scrollTopMax);
+    };
+    chatBox.addEventListener('scroll', handleScroll);
+    if (scrollBottom) {
+      scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+    return () => {
+      chatBox.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrollBottom, countMsg]);
+
   return (
     <Col className="p-0 h-100">
       <div className="d-flex flex-column h-100">
@@ -40,9 +62,9 @@ const Messages = () => {
           </p>
           <span className="text-muted">{t('titles.msg', { count: countMsg })}</span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5">
+        <div id="messages-box" className="chat-messages overflow-auto px-5" ref={chatBoxRef}>
           {curruntChannelMessages.map((message) => (
-            <div key={message.id} className="text-break mb-2">
+            <div key={message.id} className="text-break mb-2" ref={curruntChannelMessages.at(-1).id === message.id ? scrollToRef : null}>
               <b>
                 {message.username}
               </b>
