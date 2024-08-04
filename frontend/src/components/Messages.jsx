@@ -1,20 +1,16 @@
 import React, {
-  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
-import { useGetMessagesQuery, messagesApi } from '../api/messagesApi.js';
+import { useGetMessagesQuery } from '../api/messagesApi.js';
 import NewMessage from './NewMessage.jsx';
-import SocketContext from '../context/socketContext.jsx';
 
 const Messages = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const socket = useContext(SocketContext);
   const { data: messages = [] } = useGetMessagesQuery();
   const { currentChannel } = useSelector((state) => state.app);
   const scrollToRef = useRef(null);
@@ -26,18 +22,6 @@ const Messages = () => {
   );
 
   const countMsg = curruntChannelMessages.length;
-
-  useEffect(() => {
-    socket.on('newMessage', (newMessage) => {
-      dispatch(messagesApi.util.updateQueryData('getMessages', undefined, (draftMessages) => {
-        draftMessages.push(newMessage);
-      }));
-    });
-
-    return () => {
-      socket.off('newMessage');
-    };
-  }, [dispatch, socket]);
 
   useEffect(() => {
     const chatBox = chatBoxRef.current;

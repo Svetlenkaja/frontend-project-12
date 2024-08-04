@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Col,
@@ -7,8 +7,7 @@ import {
   ButtonGroup,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useGetChannelsQuery, channelsApi } from '../api/channelsApi';
-import { messagesApi } from '../api/messagesApi.js';
+import { useGetChannelsQuery } from '../api/channelsApi';
 import {
   setCurrentChannel,
   setActiveModal,
@@ -16,13 +15,11 @@ import {
   defaultChannel,
 } from '../slices/appSlice.js';
 import Modal from './modal/Modal.jsx';
-import SocketContext from '../context/socketContext.jsx';
 
 const Channels = () => {
   const { data: channels = [] } = useGetChannelsQuery();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const socket = useContext(SocketContext);
   const scrollToRef = useRef(null);
   const scrollToTop = useRef(null);
 
@@ -43,51 +40,6 @@ const Channels = () => {
       scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [currentChannel.id]);
-
-  useEffect(() => {
-    socket.on('newChannel', (newChannel) => {
-      dispatch(channelsApi.util.updateQueryData(
-        'getChannels',
-        undefined,
-        (draftChannels) => { draftChannels.push(newChannel); },
-      ));
-    });
-
-    socket.on('renameChannel', (newChannel) => {
-      dispatch(channelsApi.util.updateQueryData(
-        'getChannels',
-        undefined,
-        (draftChannels) => {
-          const channel = draftChannels.find(({ id }) => id === newChannel.id);
-          if (channel) {
-            channel.name = newChannel.name;
-          }
-        },
-      ));
-    });
-
-    socket.on('removeChannel', async (removeChannel) => {
-      dispatch(channelsApi.util.updateQueryData(
-        'getChannels',
-        undefined,
-        (draftChannels) => draftChannels.filter(({ id }) => id !== removeChannel.id),
-      ));
-      dispatch(messagesApi.util.updateQueryData(
-        'getMessages',
-        undefined,
-        (draftMessages) => draftMessages.filter(({ channelId }) => channelId !== removeChannel.id),
-      ));
-      if (removeChannel.id === currentChannel.id) {
-        dispatch(setCurrentChannel(defaultChannel));
-      }
-    });
-
-    return () => {
-      socket.off('renameChannel');
-      socket.off('newChannel');
-      socket.off('removeChannel');
-    };
-  }, [dispatch, socket, currentChannel]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('create'));

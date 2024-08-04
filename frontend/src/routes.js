@@ -1,7 +1,6 @@
 const appPath = {
   home: () => '/',
   login: () => '/login',
-  notFound: () => '*',
   signup: () => '/signup',
 };
 

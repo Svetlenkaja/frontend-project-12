@@ -14,8 +14,8 @@ const App = () => (
         <Routes>
           <Route path={appPath.login()} element={<Login />} />
           <Route path={appPath.home()} element={<Home />} />
-          <Route path={appPath.notFound()} element={<NotFound />} />
           <Route path={appPath.signup()} element={<Signup />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </div>
