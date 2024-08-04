@@ -37,7 +37,9 @@ const Channels = () => {
     if (currentChannel.id === defaultChannel.id) {
       scrollToTop.current?.scrollIntoView({ behavior: 'smooth' });
     } else if (scrollToRef.current) {
-      scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
     }
   }, [currentChannel.id]);
 
