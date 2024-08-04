@@ -38,7 +38,7 @@ const Messages = () => {
     return () => {
       chatBox.removeEventListener('scroll', handleScroll);
     };
-  }, [curruntChannelMessages.lenght, isScrollTop]);
+  }, [curruntChannelMessages.length, isScrollTop]);
 
   return (
     <Col className="p-0 h-100">
