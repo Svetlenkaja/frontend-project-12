@@ -27,6 +27,7 @@ const Messages = () => {
     const chatBox = chatBoxRef.current;
     const handleScroll = () => {
       setScrollBottom(chatBoxRef.current.scrollTop === chatBoxRef.current.scrollTopMax);
+      console.log(scrollBottom);
     };
     chatBox.addEventListener('scroll', handleScroll);
     if (scrollBottom) {
@@ -35,7 +36,7 @@ const Messages = () => {
     return () => {
       chatBox.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollBottom, curruntChannelMessages.length, currentChannel.id]);
+  }, [curruntChannelMessages.length, scrollBottom]);
 
   return (
     <Col className="p-0 h-100">
