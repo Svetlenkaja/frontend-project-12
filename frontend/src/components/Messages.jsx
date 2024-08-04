@@ -13,7 +13,6 @@ const Messages = () => {
   const { t } = useTranslation();
   const { data: messages = [] } = useGetMessagesQuery();
   const { currentChannel } = useSelector((state) => state.app);
-  const scrollToRef = useRef(null);
   const chatBoxRef = useRef(null);
   const [isScrollTop, setIsScrollTop] = useState(false);
 
@@ -32,8 +31,9 @@ const Messages = () => {
     };
 
     chatBox.addEventListener('scroll', handleScroll);
+    console.log(isScrollTop);
     if (!isScrollTop) {
-      scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
     return () => {
       chatBox.removeEventListener('scroll', handleScroll);
@@ -59,7 +59,6 @@ const Messages = () => {
               {message.body}
             </div>
           ))}
-          <div ref={scrollToRef} />
         </div>
         <div className="mt-auto px-5 py-3">
           <NewMessage />
