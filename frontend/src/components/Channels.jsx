@@ -37,11 +37,9 @@ const Channels = () => {
     if (currentChannel.id === defaultChannel.id) {
       scrollToTop.current?.scrollIntoView({ behavior: 'smooth' });
     } else if (scrollToRef.current) {
-      setTimeout(() => {
-        scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 300);
+      scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [currentChannel.id]);
+  }, [channels.length, currentChannel.id]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('create'));
@@ -70,7 +68,7 @@ const Channels = () => {
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.map((channel) => (!channel.removable ? (
-          <li className="nav-item w-100" key={channel.id}>
+          <li className="nav-item w-100" key={channel.id} ref={Number(channel.id) === Number(defaultChannel.id) ? scrollToTop : null}>
             <Button
               type="button"
               className="w-100 rounded-0 text-start text-truncate"
@@ -116,7 +114,6 @@ const Channels = () => {
             </li>
           )))}
       </ul>
-      <div ref={scrollToRef} />
       <Modal />
     </Col>
   );
