@@ -25,14 +25,15 @@ const Messages = () => {
 
   useEffect(() => {
     const chatBox = chatBoxRef.current;
+
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = chatBoxRef.current;
       setIsScrollTop(scrollTop < scrollHeight - clientHeight);
-      console.log(scrollTop);
     };
+
     chatBox.addEventListener('scroll', handleScroll);
     if (!isScrollTop) {
-      scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
     return () => {
       chatBox.removeEventListener('scroll', handleScroll);
