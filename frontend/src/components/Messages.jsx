@@ -48,7 +48,7 @@ const Messages = () => {
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5" ref={chatBoxRef}>
           {curruntChannelMessages.map((message) => (
-            <div key={message.id} className="text-break mb-2" ref={curruntChannelMessages.at(-1).id === message.id ? scrollToRef : null}>
+            <div key={message.id} className="text-break mb-2">
               <b>
                 {message.username}
               </b>
@@ -56,6 +56,7 @@ const Messages = () => {
               {message.body}
             </div>
           ))}
+          <div ref={scrollToRef} />
         </div>
         <div className="mt-auto px-5 py-3">
           <NewMessage />
