@@ -27,13 +27,13 @@ const Messages = () => {
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = chatBoxRef.current;
-      setIsScrollTop(scrollTop < scrollHeight - clientHeight);
+      setIsScrollTop(scrollTop !== scrollHeight - clientHeight);
     };
 
     chatBox.addEventListener('scroll', handleScroll);
     console.log(isScrollTop);
     if (!isScrollTop) {
-      chatBox.scrollTop = chatBox.scrollHeight;
+      chatBox.scrollTop = chatBox.scrollHeight - chatBox.clientHeight;
     }
     return () => {
       chatBox.removeEventListener('scroll', handleScroll);
