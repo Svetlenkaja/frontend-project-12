@@ -15,7 +15,7 @@ const Messages = () => {
   const { currentChannel } = useSelector((state) => state.app);
   const scrollToRef = useRef(null);
   const chatBoxRef = useRef(null);
-  const [scrollBottom, setScrollBottom] = useState(true);
+  const [isScrollTop, setIsScrollTop] = useState(false);
 
   const curruntChannelMessages = messages.filter(
     (message) => Number(message.channelId) === Number(currentChannel.id),
@@ -26,17 +26,18 @@ const Messages = () => {
   useEffect(() => {
     const chatBox = chatBoxRef.current;
     const handleScroll = () => {
-      setScrollBottom(chatBoxRef.current.scrollTop === chatBoxRef.current.scrollTopMax);
-      console.log(scrollBottom);
+      const { scrollTop, scrollHeight, clientHeight } = chatBoxRef.current;
+      setIsScrollTop(scrollTop < scrollHeight - clientHeight);
+      console.log(scrollTop);
     };
     chatBox.addEventListener('scroll', handleScroll);
-    if (scrollBottom) {
+    if (!isScrollTop) {
       scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
     return () => {
       chatBox.removeEventListener('scroll', handleScroll);
     };
-  }, [curruntChannelMessages.length, scrollBottom]);
+  }, [curruntChannelMessages.length, isScrollTop]);
 
   return (
     <Col className="p-0 h-100">
