@@ -10,8 +10,7 @@ const Message = () => {
   const { t } = useTranslation();
   const [addMessage] = useAddMessageMutation();
   const { username } = useSelector((state) => state.auth);
-  const { currentChannel } = useSelector((state) => state.app);
-  const channelId = currentChannel.id;
+  const { currentChannelId: channelId } = useSelector((state) => state.channel);
 
   const handleFormSubmit = async (values, { resetForm }) => {
     const { message } = values;

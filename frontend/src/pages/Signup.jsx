@@ -6,19 +6,15 @@ import {
   Button,
 } from 'react-bootstrap';
 import { Formik } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useRegisterMutation } from '../api/authApi';
-import { setUser } from '../slices/authSlice';
-import appPath from '../routes';
+import { useAuth } from '../context/authContext';
 
 const Signup = () => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const [register] = useRegisterMutation();
-  const nav = useNavigate();
+  const { logIn } = useAuth();
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().trim()
@@ -49,10 +45,7 @@ const Signup = () => {
                   try {
                     const { data, error } = await register(values);
                     if (data) {
-                      localStorage.setItem('token', data.token);
-                      localStorage.setItem('username', data.username);
-                      dispatch(setUser(data));
-                      nav(appPath.home());
+                      logIn(data);
                     } else if (error?.status === 409) {
                       setErrors({ username: t('form.validation.userExists') });
                     } else {

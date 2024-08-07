@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as filter from 'leo-profanity';
 import { toast } from 'react-toastify';
 import { useAddChannelMutation } from '../../api/channelsApi.js';
-import { setCurrentChannel } from '../../slices/appSlice';
+import { setCurrentChannelId } from '../../slices/channelSlice';
 
 const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
   const [addChannel] = useAddChannelMutation();
@@ -29,7 +29,7 @@ const CreateChannel = ({ handleCloseModal, validationSchema, t }) => {
             toast.error(t('notification.network_error'));
           } else {
             handleCloseModal();
-            dispatch(setCurrentChannel(channel));
+            dispatch(setCurrentChannelId(channel.id));
             toast.success(t('notification.create'));
           }
         } catch (error) {

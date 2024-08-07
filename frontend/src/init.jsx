@@ -14,7 +14,7 @@ import AuthProvider from './context/authContext';
 import SocketContext from './context/socketContext';
 import resources from './locales';
 import App from './App.js';
-import { setCurrentChannel, defaultChannel } from './slices/appSlice.js';
+import { setCurrentChannelId, defaultChannelId } from './slices/channelSlice.js';
 
 const rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
@@ -77,9 +77,9 @@ const init = async () => {
       (draftMessages) => draftMessages.filter(({ channelId }) => channelId !== removeChannel.id),
     ));
 
-    const { currentChannel } = store.getState().app;
-    if (removeChannel.id === currentChannel.id) {
-      store.dispatch(setCurrentChannel(defaultChannel));
+    const { currentChannelId } = store.getState().channel;
+    if (removeChannel.id === currentChannelId) {
+      store.dispatch(setCurrentChannelId(defaultChannelId));
     }
   });
 

@@ -27,6 +27,7 @@ const ru = {
       signup: 'Регистрация',
       logout: 'Выйти',
       no_account: 'Нет аккаунта?',
+      to_home: 'Перейти на главную страницу',
       channel: 'Каналы',
       channelManagement: 'Управление каналом',
       count_msg: 'сообщений',
@@ -65,6 +66,7 @@ const ru = {
       network_error: 'Ошибка сети',
       authorize_error: 'Неверные имя пользователя или пароль',
       unknown_error: 'Неизвестная ошибка',
+      not_found: 'Страница не найдена',
     },
   },
 };

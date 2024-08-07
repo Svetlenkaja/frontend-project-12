@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/Svetlenkaja/frontend-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Svetlenkaja/frontend-project-12/actions)",
+  "description": "HexletChat is a messaging platform where peopls can communicate with each other.",
   "main": "src/index.js",
   "scripts": {
     "build": "npm run build --prefix frontend",

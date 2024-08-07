@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useLoginMutation } from '../api/authApi';
 import { useAuth } from '../context/authContext';
+import appPath from '../routes';
 
 const Login = () => {
   const [login] = useLoginMutation();
@@ -100,7 +101,7 @@ const Login = () => {
                   {t('titles.no_account')}
                   &nbsp;
                 </span>
-                <a href="/signup">
+                <a href={appPath.signup()}>
                   {t('titles.signup')}
                 </a>
               </div>

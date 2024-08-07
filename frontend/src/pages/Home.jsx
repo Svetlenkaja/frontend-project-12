@@ -5,16 +5,17 @@ import Row from 'react-bootstrap/Row';
 import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
 import appPath from '../routes';
+import { useAuth } from '../context/authContext.jsx';
 
 const Home = () => {
   const nav = useNavigate();
+  const { token } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (!token) {
       nav(appPath.login());
     }
-  }, [nav]);
+  }, [token, nav]);
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">

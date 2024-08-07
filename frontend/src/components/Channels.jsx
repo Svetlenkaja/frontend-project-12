@@ -9,11 +9,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useGetChannelsQuery } from '../api/channelsApi';
 import {
-  setCurrentChannel,
   setActiveModal,
   setModalChannel,
-  defaultChannel,
 } from '../slices/appSlice.js';
+import { setCurrentChannelId, defaultChannelId } from '../slices/channelSlice.js';
 import Modal from './modal/Modal.jsx';
 
 const Channels = () => {
@@ -23,23 +22,23 @@ const Channels = () => {
   const scrollToRef = useRef(null);
   const scrollToTop = useRef(null);
 
-  const { currentChannel } = useSelector((state) => state.app);
+  const { currentChannelId } = useSelector((state) => state.channel);
 
   const selectChannel = (channel) => {
-    if (channel.id !== currentChannel.id) {
-      dispatch(setCurrentChannel(channel));
+    if (channel.id !== currentChannelId) {
+      dispatch(setCurrentChannelId(channel.id));
     }
   };
 
   const selectModalChannel = (channel) => dispatch(setModalChannel(channel));
 
   useEffect(() => {
-    if (currentChannel.id === defaultChannel.id) {
+    if (currentChannelId === defaultChannelId) {
       scrollToTop.current?.scrollIntoView({ behavior: 'smooth' });
     } else if (scrollToRef.current) {
       scrollToRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [channels.length, currentChannel.id]);
+  }, [channels.length, currentChannelId]);
 
   const buttonHandle = () => {
     dispatch(setActiveModal('create'));
@@ -68,12 +67,12 @@ const Channels = () => {
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.map((channel) => (!channel.removable ? (
-          <li className="nav-item w-100" key={channel.id} ref={Number(channel.id) === Number(defaultChannel.id) ? scrollToTop : null}>
+          <li className="nav-item w-100" key={channel.id} ref={Number(channel.id) === Number(defaultChannelId) ? scrollToTop : null}>
             <Button
               type="button"
               className="w-100 rounded-0 text-start text-truncate"
               variant={`${
-                Number(currentChannel.id) === Number(channel.id) ? 'secondary' : ''
+                Number(currentChannelId) === Number(channel.id) ? 'secondary' : ''
               }`}
               onClick={() => selectChannel(channel)}
             >
@@ -83,13 +82,13 @@ const Channels = () => {
           </li>
         )
           : (
-            <li className="nav-item w-100" key={channel.id} ref={channel.id === currentChannel.id ? scrollToRef : null}>
+            <li className="nav-item w-100" key={channel.id} ref={channel.id === currentChannelId ? scrollToRef : null}>
               <Dropdown as={ButtonGroup} className="w-100 d-flex">
                 <Button
                   type="button"
                   className="w-100 rounded-0 text-start text-truncate"
                   variant={`${
-                    Number(currentChannel.id) === Number(channel.id) ? 'secondary' : ''
+                    Number(currentChannelId) === Number(channel.id) ? 'secondary' : ''
                   }`}
                   onClick={() => selectChannel(channel)}
                 >
@@ -97,7 +96,7 @@ const Channels = () => {
                   {channel.name}
                 </Button>
                 <Dropdown.Toggle variant={`${
-                  Number(currentChannel.id) === Number(channel.id) ? 'secondary' : ''
+                  Number(currentChannelId) === Number(channel.id) ? 'secondary' : ''
                 }`}
                 >
                   <span className="visually-hidden">{t('titles.channelManagement')}</span>

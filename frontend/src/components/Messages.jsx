@@ -12,12 +12,12 @@ import NewMessage from './NewMessage.jsx';
 const Messages = () => {
   const { t } = useTranslation();
   const { data: messages = [] } = useGetMessagesQuery();
-  const { currentChannel } = useSelector((state) => state.app);
+  const { currentChannelId } = useSelector((state) => state.channel);
   const chatBoxRef = useRef(null);
   const [isScrollTop, setIsScrollTop] = useState(false);
 
   const curruntChannelMessages = messages.filter(
-    (message) => Number(message.channelId) === Number(currentChannel.id),
+    (message) => Number(message.channelId) === Number(currentChannelId),
   );
 
   const countMsg = curruntChannelMessages.length;
@@ -31,7 +31,6 @@ const Messages = () => {
     };
 
     chatBox.addEventListener('scroll', handleScroll);
-    console.log(isScrollTop);
     if (!isScrollTop) {
       chatBox.scrollTop = chatBox.scrollHeight - chatBox.clientHeight;
     }

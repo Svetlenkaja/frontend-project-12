@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useRemoveChannelMutation } from '../../api/channelsApi';
-import { setCurrentChannel, defaultChannel } from '../../slices/appSlice';
+import { setCurrentChannelId, defaultChannelId } from '../../slices/channelSlice';
 
 const RemoveChannel = ({
   modalChannel,
@@ -11,13 +11,13 @@ const RemoveChannel = ({
   t,
 }) => {
   const [removeChannel] = useRemoveChannelMutation();
-  const { currentChannel } = useSelector((state) => state.app);
+  const { currentChannelId } = useSelector((state) => state.channel);
 
   const handleRemove = async (id) => {
     try {
       await removeChannel(id).unwrap();
-      if (currentChannel.id === id) {
-        dispatch(setCurrentChannel(defaultChannel));
+      if (currentChannelId === id) {
+        dispatch(setCurrentChannelId(defaultChannelId));
       }
       toast.success(t('notification.remove'));
       handleCloseModal();
