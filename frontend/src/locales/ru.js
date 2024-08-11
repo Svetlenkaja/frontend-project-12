@@ -29,6 +29,7 @@ const ru = {
       no_account: 'Нет аккаунта?',
       to_home: 'Перейти на главную страницу',
       channel: 'Каналы',
+      channel_not_found: 'Канал не найден',
       channelManagement: 'Управление каналом',
       count_msg: 'сообщений',
       newMessage: 'Новое сообщение',

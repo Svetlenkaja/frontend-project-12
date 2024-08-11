@@ -7,18 +7,22 @@ import { useSelector } from 'react-redux';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 import { useGetMessagesQuery } from '../api/messagesApi.js';
+import { useGetChannelsQuery } from '../api/channelsApi.js';
 import NewMessage from './NewMessage.jsx';
 
 const Messages = () => {
   const { t } = useTranslation();
-  const { data: messages = [] } = useGetMessagesQuery();
   const { currentChannelId } = useSelector((state) => state.channel);
+  const { data: messages = [] } = useGetMessagesQuery();
+  const { data: channels = [] } = useGetChannelsQuery();
   const chatBoxRef = useRef(null);
   const [isScrollTop, setIsScrollTop] = useState(false);
 
   const curruntChannelMessages = messages.filter(
     (message) => Number(message.channelId) === Number(currentChannelId),
   );
+
+  const currentChannel = channels.find(({ id }) => Number(id) === Number(currentChannelId));
 
   const countMsg = curruntChannelMessages.length;
 
@@ -44,7 +48,11 @@ const Messages = () => {
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># general</b>
+            <b>
+              #
+              &nbsp;
+              {currentChannel?.name}
+            </b>
           </p>
           <span className="text-muted">{t('titles.msg', { count: countMsg })}</span>
         </div>
